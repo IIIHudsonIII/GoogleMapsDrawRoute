@@ -34,7 +34,7 @@ import java.util.List;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    ArrayList<LatLng> MarkerPoints;
+    ArrayList<LatLng> markerPoints;
     GoogleApiClient mGoogleApiClient;
     Location mLastLocation;
     Marker mCurrLocationMarker;
@@ -44,10 +44,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        /** TODO Hudson - Para abrir um AppCompatActivity
+         // Intent it = new Intent(MainActivity.this, OtherActivity.class);
+         // startActivity(it);
+         */
     }
 
 
@@ -94,25 +99,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         addSydneyMarkerOnMap();
          */
 
-
         // Setting onclick event listener for the map
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
             @Override
             public void onMapClick(LatLng point) {
 
-                if (MarkerPoints == null) {
-                    MarkerPoints = new ArrayList<LatLng>();
+                if (markerPoints == null) {
+                    markerPoints = new ArrayList<LatLng>();
                 }
 
                 // Already two locations
-                if (MarkerPoints.size() > 1) {
-                    MarkerPoints.clear();
+                if (markerPoints.size() > 1) {
+                    markerPoints.clear();
                     mMap.clear();
                 }
 
                 // Adding new item to the ArrayList
-                MarkerPoints.add(point);
+                markerPoints.add(point);
 
                 // Creating MarkerOptions
                 MarkerOptions options = new MarkerOptions();
@@ -124,9 +128,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                  * For the start location, the color of marker is GREEN and
                  * for the end location, the color of marker is RED.
                  */
-                if (MarkerPoints.size() == 1) {
+                if (markerPoints.size() == 1) {
                     options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-                } else if (MarkerPoints.size() == 2) {
+                } else if (markerPoints.size() == 2) {
                     options.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED));
                 }
 
@@ -135,9 +139,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 mMap.addMarker(options);
 
                 // Checks, whether start and end locations are captured
-                if (MarkerPoints.size() >= 2) {
-                    LatLng origin = MarkerPoints.get(0);
-                    LatLng dest = MarkerPoints.get(1);
+                if (markerPoints.size() >= 2) {
+                    LatLng origin = markerPoints.get(0);
+                    LatLng dest = markerPoints.get(1);
 
                     // Getting URL to the Google Directions API
                     String url = getUrl(origin, dest);
@@ -155,6 +159,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
     }
 
+    @Deprecated
     private void addSydneyMarkerOnMap() {
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
